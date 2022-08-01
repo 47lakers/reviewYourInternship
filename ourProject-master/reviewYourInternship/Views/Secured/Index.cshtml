@@ -1,0 +1,272 @@
+﻿<style>
+    h1 {
+        color: white;
+    }
+
+    h2 {
+        color: #FCBF1E;
+    }
+
+    #editReviewError {
+        padding: 10px;
+    }
+
+    .deleteaccount {
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-bottom: 20px;
+    }
+
+
+    .editReviewHeader {
+        padding-top: 80px;
+        padding-bottom: 20px;
+    }
+
+    .form-control[disabled] {
+        background-color: white !important;
+    }
+
+    .ReviewBorder {
+        border: 5px solid #FCBF1E;
+        background-color: white;
+    }
+
+    .ReviewPadding {
+        padding: 10px;
+    }
+
+    #createReviewError {
+        padding-left: 10px;
+    }
+
+
+    .rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: left;
+    }
+
+        .rating > input {
+            display: none;
+        }
+
+        .rating > label {
+            position: relative;
+            width: 30px;
+            font-size: 25px;
+            color: #FCBF1E;
+            cursor: pointer;
+        }
+
+            .rating > label::before {
+                content: "\2605";
+                position: absolute;
+                opacity: 0;
+            }
+
+            .rating > label:hover:before,
+            .rating > label:hover ~ label:before {
+                opacity: 1 !important;
+            }
+
+        .rating > input:checked ~ label:before {
+            opacity: 1;
+        }
+</style>
+
+<div id="accountBody">
+    @if (ViewBag.reviewList.Count == 0)
+    {
+        <div class="d-flex justify-content-center editReviewHeader">
+            <h1>No Previous Reviews</h1>
+        </div>
+        <div class="d-flex justify-content-center">
+            <p style="color: white; cursor: pointer;" onclick="deleteAccountModal()">If you want to delete your account, click here.</p>
+        </div>
+    }
+    else
+    {
+        <div class="d-flex justify-content-center editReviewHeader">
+            <h1>My Reviews</h1>
+        </div>
+        <div class="d-flex justify-content-center">
+            <p style="color: white; cursor: pointer;" onclick="deleteAccountModal()">If you want to delete your account, click here.</p>
+        </div>
+    }
+
+    @foreach (var review in ViewBag.reviewList)
+    {
+        <input hidden value="@review.Id" />
+        <input id="@(review.Id + "Company")" type="text" disabled hidden value="@review.Company" />
+        <input id="@(review.Id + "CompanyId")" hidden value="@review.CompanyId" />
+        <input id="@(review.Id + "Rating")" hidden value="@review.Rating" />
+
+
+        <div class="ReviewBorder">
+            <div class="ReviewPadding">
+                <h2 id="@(review.Id + "Company")">@review.Company: @review.Rating/5 stars</h2>
+                <div class="row">
+                    <div class="col">
+                        <div id="@(review.Id + "Stars")" class="rating" hidden>
+                            <input type="radio" name="rating" value="5" id="@("five" + review.Id)"><label for="@("five" + review.Id)">☆</label>
+                            <input type="radio" name="rating" value="4" id="@("four" + review.Id)"><label for="@("four" + review.Id)">☆</label>
+                            <input type="radio" name="rating" value="3" id="@("three" + review.Id)"><label for="@("three" + review.Id)">☆</label>
+                            <input type="radio" name="rating" value="2" id="@("two" + review.Id)"><label for="@("two" + review.Id)">☆</label>
+                            <input type="radio" name="rating" value="1" id="@("one" + review.Id)"><label for="@("one" + review.Id)">☆</label>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Position:</label>
+                    <input id="@(review.Id + "Position")" class="form-control" type="text" disabled value="@review.Position">
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <label>Hourly Pay:</label>
+                        <input id="@(review.Id + "Salary")" type="text" class="form-control" disabled value="$@review.Salary">
+                    </div>
+                    <div class="col">
+                        <label>Number of Months:</label>
+                        <input id="@(review.Id + "Time")" type="text" class="form-control" disabled value="@review.LengthOfTime months">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <label>City:</label>
+                        <input id="@(review.Id + "City")" class="form-control" type="text" disabled value="@review.City">
+                    </div>
+                    <div class="col">
+                        <label>State:</label>
+                        <input id="@(review.Id + "State")" class="form-control" type="text" disabled value="@review.State">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Comments:</label>
+                    <textarea id="@(review.Id + "Comments")" class="form-control" rows="3" disabled>@review.Comments</textarea>
+                </div>
+                <div>
+                    <button style="background-color: #FCBF1E;" class="btn btn-primary" id="@(review.Id + "Edit")" onclick="editPressed('@review.Id')">Edit</button>
+                    <button style="background-color: #40BAD5;" class="btn btn-primary" id="@(review.Id + "Cancel")" disabled onclick="cancelPressed('@review.Id')">Cancel</button>
+                    <button style="background-color: #FCBF1E;" class="btn btn-primary" id="@(review.Id + "Save")" disabled onclick="EditReview('@review.Id')">Save</button>
+                    <p id="editReviewError" style="color: #FCBF1E;"></p>
+                </div>
+            </div>
+        </div>
+        <br />
+    }
+</div>
+
+<!-- Modal for deleting account-->
+<div class="modal fade" id="deleteAccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-5">
+                <h5>We're sorry to see you go.</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row justify-content-center deleteaccount"><a style="color: white;">Are you sure you want to delete your account? Your reviews will still be in our database, but you won't be able to edit them anymore.</a></div>
+                <button class="btn modalClass" style="background-color: white; color: #FCBF1E;" onclick="deleteAccount()">Yes I'm sure</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $('#deleteAccount').on('hidden.bs.modal', function () {
+                $('#accountBody').show();
+            });
+        });
+
+        function deleteAccountModal() {
+            $("#deleteAccount").modal();
+
+            $('#accountBody').hide();
+        }
+
+        function EditReview(id) {
+            var d1 = {
+                id: id, company: $('#' + id + 'Company').val(), position: $('#' + id + 'Position').val(), rating: $("input[type='radio']:checked").val(), comments: $('#' + id + 'Comments').val(),
+                salary: $('#' + id + 'Salary').val(), city: $('#' + id + 'City').val(), state: $('#' + id + 'State').val(), lengthOfTime: $('#' + id + 'Time').val(),
+                companyId: $('#' + id + 'CompanyId').val(), userId: "@ViewBag.userId"
+            }
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("EditReview", "Review")",
+                data: (d1),
+                success: function (result) {
+                    if (result.message == null) {
+                        successMessage("Review has been edited!").then(() => {
+                            cancelPressed();
+                            location.reload();
+                        });
+                    } else {
+                        $('#editReviewError').text("");
+                        var text = document.createTextNode(result.message);
+                        $('#editReviewError').append(text);
+                        $('html, body').animate({ scrollTop: 0 }, 'fast');
+                    }
+                },
+                error: function (xhr) {
+                    errorMessage("Something went wrong.");
+                }
+            });
+        }
+
+        function editPressed(id) {
+            $('.btn').prop('disabled', true);
+            $('#' + id + 'Stars').prop('hidden', false);
+            $('#' + id + 'Rating').prop('disabled', false);
+            $('#' + id + 'Comments').prop('disabled', false);
+            $('#' + id + 'City').prop('disabled', false);
+            $('#' + id + 'State').prop('disabled', false);
+            $('#' + id + 'Position').prop('disabled', false);
+            $('#' + id + 'Salary').prop('disabled', false);
+            $('#' + id + 'Time').prop('disabled', false);
+            $('#' + id + 'Edit').prop('disabled', true);
+            $('#' + id + 'Cancel').prop('disabled', false);
+            $('#' + id + 'Save').prop('disabled', false);
+        }
+
+        function cancelPressed(id) {
+            $('.btn').prop('disabled', false);
+            $('#' + id + 'Stars').prop('hidden', true);
+            $('#' + id + 'Rating').prop('disabled', true);
+            $('#' + id + 'Comments').prop('disabled', true);
+            $('#' + id + 'City').prop('disabled', true);
+            $('#' + id + 'State').prop('disabled', true);
+            $('#' + id + 'Position').prop('disabled', true);
+            $('#' + id + 'Salary').prop('disabled', true);
+            $('#' + id + 'Time').prop('disabled', true);
+            $('#' + id + 'Edit').prop('disabled', false);
+            $('#' + id + 'Cancel').prop('disabled', true);
+            $('#' + id + 'Save').prop('disabled', true);
+        }
+
+        function deleteAccount() {
+            $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("DeleteUser", "Home")",
+                success: function (result) {
+                    successMessage("Successfully deleted company!").then(() => {
+                        var url = '@Url.Action("Index", "Home")';
+                        window.location.href = url;
+                    })
+                 },
+                 error: function (xhr) {
+                     errorMessage("Something went wrong.");
+                 }
+            })
+        }
+
+    </script>
+}

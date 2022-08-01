@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<style>
+    .modal-body, .modal-header {
+        background-color: #FCBF1E;
+        color: white;
+    }
+
+    .modal {
+        z-index: 100;
+    }
+
+
+</style>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Review Your Internship</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body style="background: #40BAD5;">
+    <header>
+        <nav class="navbar navbar-dark">
+            <div class="container">
+                @{
+                    if (ViewBag.companyName != null)
+                    {
+                        var compName = @ViewBag.companyName;
+                        int maxLength = 17;
+                        if (compName.Length > maxLength)
+                        {
+                            compName = compName.Substring(0, maxLength) + " ...";
+                        }
+                        <a style="color: white;" class="navbar-brand" asp-controller="Home" asp-action="Index">@compName</a>
+                    }
+                    else
+                    {
+                        if (User?.Identity?.IsAuthenticated ?? false)
+                        {
+                            <a style="color: white;" class="navbar-brand" asp-controller="Home" asp-action="Index">Hello @User.Identity.Name</a>
+                        }
+                        else
+                        {
+                            <a style="color: white;" class="navbar-brand" asp-controller="Home" asp-action="Index">Review Your Internship</a>
+                        }
+                    }
+                }
+                <button class="navbar-toggler" type="button" data-toggle="modal" data-target="#exampleModalCenter" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation" onclick="removeBody()">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Modal for hamburger-->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header border-5">
+                    @{
+                        if (User?.Identity?.IsAuthenticated ?? false)
+                        {
+                            <h5 class="modal-title" id="exampleModalLongTitle">What brings you back?</h5>
+                        }
+                        else
+                        {
+                            <h5 class="modal-title" id="exampleModalLongTitle">What brings you here?</h5>
+                        }
+                    }
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @{
+                        if (User?.Identity?.IsAuthenticated ?? false)
+                        {
+                            <div class="row justify-content-center"><a style="color: white;" class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">I want to go to the main page.</a></div>
+                            <div class="row justify-content-center"><a style="color: white;" class="nav-link" asp-area="" asp-controller="Secured" asp-action="Index">I want to see my old reviews.</a></div>
+                            <div class="row justify-content-center"><a style="color: white;" class="nav-link" asp-controller="Home" asp-action="Logout">I want to logout.</a></div>
+                            <div class="row justify-content-center"><a style="color: white;" class="nav-link" asp-controller="Home" asp-action="TermsAndConditions">I want to read the terms and conditions.</a></div>
+                        }
+                        else
+                        {
+                            <div class="row justify-content-center"><a style="color: white;" class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">I want to go to the main page.</a></div>
+                            <div class="row justify-content-center"><a style="color: white;" class="nav-link" asp-area="" asp-controller="Home" asp-action="LoginSignup">I want to login/signup.</a></div>
+                            <div class="row justify-content-center"><a style="color: white;" class="nav-link" asp-controller="Home" asp-action="TermsAndConditions">I want to read the terms and conditions.</a></div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for contact-->
+    <div class="modal fade" id="contactUs" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header border-5">
+                    <h5>Have questions?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row justify-content-center"><a style="color: white;">Email us at ira.porchia@pepperdine.edu</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container" id="body">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted" style="background: #FCBF1E;">
+        <div style="text-align: center;" class="container">
+            <a style="color: white; padding: 30px;" asp-area="" asp-controller="Home" asp-action="AboutUs">About Us</a>
+            <a style="color: white; padding: 30px;">&copy;2022</a>
+            <a href="#" style="color: white; padding: 30px;" data-toggle="modal" data-target="#contactUs" onclick="removeBody()">Contact Us</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function removeBody() {
+            $('#body').hide();
+        }
+
+        $('#exampleModalCenter').on('hidden.bs.modal', function () {
+            $('#body').show();
+        });
+
+        $('#contactUs').on('hidden.bs.modal', function () {
+            $('#body').show();
+        });
+
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

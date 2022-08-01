@@ -1,0 +1,661 @@
+﻿@model reviewYourInternship.Models.User
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    @@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 300;
+        font-size: 15px;
+        line-height: 1.7;
+        color: #FCBF1E;
+        background-color: #FCBF1E;
+        overflow-x: hidden
+    }
+
+    a {
+        cursor: pointer;
+        transition: all 200ms linear
+    }
+
+    .loginModal {
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-bottom: 20px;
+    }
+
+        a:hover {
+            text-decoration: none
+        }
+
+    .link {
+        color: #FCBF1E
+    }
+
+        .link:hover {
+            color: #FCBF1E
+        }
+
+    p {
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 1.7
+    }
+
+    h4 {
+        font-weight: 600
+    }
+
+    h6 span {
+        padding: 0 20px;
+        text-transform: uppercase;
+        font-weight: 700
+    }
+
+    .section {
+        position: relative;
+        width: 100%;
+        display: block
+    }
+
+    .full-height {
+        min-height: 100vh
+    }
+
+    [type="checkbox"]:checked,
+    [type="checkbox"]:not(:checked) {
+        position: absolute;
+        left: -9999px
+    }
+
+    .checkbox:checked + label,
+    .checkbox:not(:checked) + label {
+        position: relative;
+        display: block;
+        text-align: center;
+        width: 60px;
+        height: 16px;
+        border-radius: 2px;
+        padding: 0;
+        margin: 10px auto;
+        cursor: pointer;
+        background-color: #ffffff
+    }
+
+        .checkbox:checked + label:before,
+        .checkbox:not(:checked) + label:before {
+            position: absolute;
+            display: block;
+            width: 36px;
+            height: 36px;
+            border-radius: 10%;
+            color: #FCBF1E;
+            background-color: #FCBF1E;
+            content: '';
+            z-index: 20;
+            font-size: 12px;
+            top: -10px;
+            left: -10px;
+            line-height: 36px;
+            text-align: center;
+            font-size: 24px;
+            transition: all 0.5s ease
+        }
+
+        .checkbox:checked + label:before {
+            transform: translateX(44px) rotate(-270deg)
+        }
+
+    .card-3d-wrap {
+        position: relative;
+        width: 440px;
+        max-width: 100%;
+        height: 400px;
+        -webkit-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+        perspective: 800px;
+        margin-top: 40px
+    }
+
+    .card-3d-wrapper {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        -webkit-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+        transition: all 600ms ease-out
+    }
+
+    .login-div {
+        width: 150px
+    }
+
+    .card-front,
+    .card-back {
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        position: absolute;
+        border-radius: 0px;
+        left: 0;
+        top: 0;
+        -webkit-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+        backface-visibility: hidden
+    }
+
+    .card-back {
+        transform: rotateY(180deg)
+    }
+
+    .checkbox:checked ~ .card-3d-wrap .card-3d-wrapper {
+        transform: rotateY(180deg)
+    }
+
+    .center-wrap {
+        position: absolute;
+        width: 100%;
+        padding: 0 35px;
+        top: 50%;
+        left: 0;
+        transform: translate3d(0, -50%, 35px) perspective(100px);
+        z-index: 20;
+        display: block
+    }
+
+    .form-group:not(.modalClass) {
+        position: relative;
+        display: block;
+        margin: 0;
+        padding: 0
+    }
+
+    .form-style:not(.modalClass) {
+        padding: 13px 20px;
+        padding-left: 55px;
+        height: 48px;
+        width: 100%;
+        font-weight: 500;
+        border-radius: 4px;
+        font-size: 14px;
+        line-height: 22px;
+        letter-spacing: 0.5px;
+        outline: none;
+        color: black;
+        background-color: white;
+        border: none;
+        transition: all 200ms linear;
+        box-shadow: 0 4px 8px 0 rgba(21, 21, 21, .2)
+    }
+
+    .form-style:focus,
+    .form-style:active {
+        border: none;
+        outline: none;
+        box-shadow: 0 4px 8px 0 rgba(21, 21, 21, .2)
+    }
+
+    .input-icon {
+        position: absolute;
+        top: 0;
+        left: 18px;
+        height: 48px;
+        font-size: 24px;
+        line-height: 48px;
+        text-align: left;
+        color: #FCBF1E;
+        transition: all 200ms linear
+    }
+
+    .form-group input:-ms-input-placeholder {
+        color: #c4c3ca;
+        opacity: 0.7;
+        transition: all 200ms linear
+    }
+
+    .form-group input::-moz-placeholder {
+        color: #c4c3ca;
+        opacity: 0.7;
+        transition: all 200ms linear
+    }
+
+    .form-group input:-moz-placeholder {
+        color: #c4c3ca;
+        opacity: 0.7;
+        transition: all 200ms linear
+    }
+
+    .form-group input::-webkit-input-placeholder {
+        color: #c4c3ca;
+        opacity: 0.7;
+        transition: all 200ms linear
+    }
+
+    .form-group input:focus:-ms-input-placeholder {
+        opacity: 0;
+        transition: all 200ms linear
+    }
+
+    .form-group input:focus::-moz-placeholder {
+        opacity: 0;
+        transition: all 200ms linear
+    }
+
+    .form-group input:focus:-moz-placeholder {
+        opacity: 0;
+        transition: all 200ms linear
+    }
+
+    .form-group input:focus::-webkit-input-placeholder {
+        opacity: 0;
+        transition: all 200ms linear
+    }
+
+    .btn:not(.modalClass) {
+        border-radius: 4px;
+        height: 48px;
+        width: 100%;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        transition: all 200ms linear;
+        padding: 0 30px;
+        letter-spacing: 1px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -ms-flex-pack: center;
+        text-align: center;
+        border: none;
+        background-color: #FCBF1E;
+        color: #fff;
+        box-shadow: 0 8px 24px 0 rgba(18, 248, 173, .2)
+    }
+
+    .btn:active,
+    .btn:focus {
+        background-color: #fff;
+        color: #FCBF1E;
+        box-shadow: 0 8px 24px 0 rgba(255, 255, 255, .2)
+    }
+
+    .btn:hover {
+        background-color: #fff;
+        color: #FCBF1E;
+        box-shadow: 0 8px 24px 0 rgba(255, 255, 255, .2)
+    }
+
+    .logo {
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        display: block;
+        z-index: 100;
+        transition: all 250ms linear
+    }
+
+        .logo img {
+            height: 26px;
+            width: auto;
+            display: block
+        }
+</style>
+<div id="loginForm" class="section" style="z-index: 0;">
+    <div class="container">
+        <div class="row full-height justify-content-center">
+            <div class="col-12 text-center align-self-center py-5">
+                <div class="section pb-5 pt-5 pt-sm-2 text-center">
+                    <h6 class="mb-0 pb-3">
+                        <span>Log In </span>
+                        <span>Sign Up</span>
+                    </h6>
+                    <input class="checkbox" type="checkbox" id="reg-log" name="reg-log" />
+                    <label for="reg-log"></label>
+                    <div class="card-3d-wrap mx-auto">
+                        <div class="card-3d-wrapper">
+                            <div class="card-front">
+                                <div class="center-wrap">
+                                    <div class="section text-center">
+                                        <h4 class="mb-4 pb-3">Log In</h4>
+                                        <div class="form-group">
+                                            <input id="myEmail" class="form-style" placeholder="Your Email" autocomplete="none">
+                                            <i class="input-icon fa fa-at"></i>
+                                        </div>
+                                        <div class="form-group mt-2">
+                                            <input id="myPassword" type="password" class="form-style" placeholder="Your Password" autocomplete="none">
+                                            <i id="loginLock" class="input-icon fa fa-lock" onclick="showPasswordLogin()"></i>
+                                        </div>
+                                        <input type="button" class="btn mt-4" value="Login" onclick="login()" />
+                                        <p class="mb-0 mt-4 text-center">
+                                            <a onclick="forgotPassword()">Forgot your password?</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-back">
+                                <div class="center-wrap">
+                                    <div class="section text-center">
+                                        <h4 class="mb-4 pb-3">Sign Up</h4>
+                                        <form>
+                                            <div class="form-group">
+                                                <input id="Name" class="form-style" placeholder="Your Username" autocomplete="none" />
+                                                <i class="input-icon fa fa-user"></i>
+                                            </div>	<div class="form-group mt-2">
+                                                <input id="Email" class="form-style" placeholder="Your Email" autocomplete="none">
+                                                <i class="input-icon fa fa-at"></i>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <input type="password" id="Password" class="form-style" placeholder="Your Password" autocomplete="none">
+                                                <i id="signupLock" class="input-icon fa fa-lock" onclick="showPasswordSignup()"></i>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="button" class="btn mt-4" value="Signup" onclick="signUpCheck()" />
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for errors-->
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Error</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="Errors"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for forgot password-->
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Forgot Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="modalClass">
+                    <div class="form-group modalClass">
+                        <input id="sendUserId" class="form-style modalClass" type="text" placeholder="Your Email">
+                    </div>
+                </form>
+                <button class="btn modalClass" style="background-color: white; color: #FCBF1E;" onclick="sendUserId()">Send Email</button>
+                <div id="emailNotFound"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for resetting password-->
+<div class="modal fade" id="sendUserIdModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Reset Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="modalClass">
+                    <div class="form-group modalClass">
+                        <input id="yourId" class="form-style modalClass" type="text" placeholder="Your Id">
+                    </div>
+                    <div class="form-group modalClass">
+                        <input type="password" id="newPassword" class="form-style modalClass" placeholder="Your New Password">
+                    </div>
+                    <div class="form-group modalClass">
+                        <input type="password" id="newConfirmedPassword" class="form-style modalClass" placeholder="Confirm New Password">
+                    </div>
+                </form>
+                <button class="btn modalClass" style="background-color: white; color: #FCBF1E;" onclick="changePassword()">Change Password</button>
+                <div id="changePasswordError"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for signing up-->
+<div class="modal fade" id="signUpCheck" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-5">
+                <h5>Please read before you create!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row justify-content-center loginModal"><a style="color: white;">By clicking continue, you acknowledge that you have read the terms and conditions.</a></div>
+                <button class="btn modalClass" style="background-color: white; color: #FCBF1E;" onclick="signUp()">Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+            $('#errorModal').on('hidden.bs.modal', function () {
+                $('#loginForm').show();
+            });
+
+            $('#forgotPasswordModal').on('hidden.bs.modal', function () {
+                $('#loginForm').show();
+            });
+
+            $('#sendUserIdModal').on('hidden.bs.modal', function () {
+                location.reload();
+            });
+
+            $('#signUpCheck').on('hidden.bs.modal', function () {
+                $('#loginForm').show();
+            });
+    });
+
+    function signUpCheck() {
+            $.ajax({
+            type: "POST",
+            url: '@Url.Action("CheckUser","Home")',
+            data: { name: $('#Name').val(), email: $('#Email').val(), password: $('#Password').val() },
+                success: function (result) {
+                if (result.message1 == null && result.message2 == null) {
+                    $("#signUpCheck").modal();
+
+                    $('#loginForm').hide();
+               } else {
+                   var div = document.getElementById('Errors');
+                   div.textContent = ''
+                   var ul = document.createElement('ul');
+
+                   for (let x in result.message1) {
+                       var li = document.createElement('li');
+                       li.innerHTML = result.message1[x];
+                       ul.appendChild(li);
+                   }
+
+                   for (let x in result.message2) {
+                       var li = document.createElement('li');
+                       li.innerHTML = result.message2[x].description;
+                       ul.appendChild(li);
+                   }
+                    div.appendChild(ul);
+                    $("#errorModal").modal();
+
+                    $('#loginForm').hide();
+                }
+            },
+            error: function (error) {
+                $('#loginForm').hide();
+                errorMessage("Something went wrong.");
+            }
+        });
+    }
+
+
+    function signUp() {
+            $.ajax({
+            type: "POST",
+            url: '@Url.Action("CreateUser","Home")',
+            data: { name: $('#Name').val(), email: $('#Email').val(), password: $('#Password').val() },
+            success: function (result) {
+                if (result.message == null) {
+                   var url = '@Url.Action("Index", "Home")';
+                   window.location.href = url;
+                } else {
+                    $('#loginForm').hide();
+                    errorMessage("Something went wrong.");
+                }
+            },
+            error: function (error) {
+                $('#loginForm').hide();
+                errorMessage("Something went wrong.");
+            }
+        });
+    }
+
+    function login() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Login", "Home")',
+            data: { email: $('#myEmail').val(), password: $('#myPassword').val() },
+            success: function (result) {
+                if (result.message1 == null) {
+                    var url = '@Url.Action("Index", "Home")';
+                    window.location.href = url;
+                } else {
+                    var div = document.getElementById('Errors');
+                    div.textContent = '';
+                    var ul = document.createElement('ul');
+                    var li = document.createElement('li');
+                    li.innerHTML = result.message1;
+                    ul.appendChild(li);
+                    div.appendChild(ul);
+                    $("#errorModal").modal();
+
+                    $('#loginForm').hide();
+                }
+
+            },
+            error: function (error) {
+                $('#loginForm').hide();
+                errorMessage("Something went wrong.");
+            }
+        });
+    }
+
+    function showPasswordLogin() {
+        if ($("#loginLock").hasClass("fa-lock")) {
+
+            $("#loginLock").removeClass("fa-lock");
+            $("#loginLock").addClass("fa-unlock");
+            $("#myPassword").removeAttr("type");
+
+        } else {
+
+            $("#loginLock").removeClass("fa-unlock");
+            $("#loginLock").addClass("fa-lock");
+            $("#myPassword").attr("type", "password");
+
+        }
+    }
+
+    function showPasswordSignup() {
+        if ($("#signupLock").hasClass("fa-lock")) {
+
+            $("#signupLock").removeClass("fa-lock");
+            $("#signupLock").addClass("fa-unlock");
+            $("#Password").removeAttr("type");
+
+        } else {
+
+            $("#signupLock").removeClass("fa-unlock");
+            $("#signupLock").addClass("fa-lock");
+            $("#Password").attr("type", "password");
+
+        }
+    }
+
+    function forgotPassword() {
+        var div = document.getElementById('emailNotFound');
+        div.textContent = '';
+        $("#forgotPasswordModal").modal();
+
+        $('#loginForm').hide();
+    }
+
+    function sendUserId(){
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SendUserId", "Home")',
+            data: { email: $('#sendUserId').val() },
+            success: function (result) {
+                if (result.message1 == null) {
+                    $("#forgotPasswordModal").hide();
+                    $("#sendUserIdModal").modal();
+                    $('#loginForm').hide()
+                } else {
+                    var div = document.getElementById('emailNotFound');
+                    div.textContent = '';
+                    var ul = document.createElement('ul');
+                    var li = document.createElement('li');
+                    li.innerHTML = result.message1;
+                    ul.appendChild(li);
+                    div.appendChild(ul);
+                }
+
+            },
+            error: function (error) {
+                errorMessage("Something went wrong.");
+            }
+        });
+    }
+
+    function changePassword(){
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangePassword", "Home")',
+            data: { id: $('#yourId').val(), newPassword: $('#newPassword').val(), newConfirmedPassword: $('#newConfirmedPassword').val() },
+            success: function (result) {
+                if (result.message1 == null) {
+                    successMessage("Password change was successful!").then(() => {
+                        var url = '@Url.Action("Index", "Home")';
+                        window.location.href = url;
+                    });
+                } else {
+                    var div = document.getElementById('changePasswordError');
+                    div.textContent = '';
+                    var ul = document.createElement('ul');
+                    var li = document.createElement('li');
+                    li.innerHTML = result.message1;
+                    ul.appendChild(li);
+                    div.appendChild(ul);
+                }
+
+            },
+            error: function (error) {
+                errorMessage("Something went wrong.");
+            }
+        });
+    }
+</script>
